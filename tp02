@@ -1,62 +1,90 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
+#include <stdlib.h>
 
-char *ChargerChaine(int N) {
-    char *chaine = (char *)malloc((N + 1) * sizeof(char));
-    if (chaine == NULL) {
-        printf("Erreur d'allocation mémoire.\n");
-        exit(1);
-    }
-    printf("Entrez une chaine de %d caracteres (sans espaces): ", N);
-    scanf("%s", chaine);
-    return chaine;
-}
-
-int Longueur(const char *ch) {
-    int len = 0;
-    while (ch[len] != '\0') {
-        len++;
-    }
-    return len;
-}
-
-void ChargerTab(const char *p, char Tab[]) {
-    int i = 0;
-    while (p[i] != '\0') {
-        Tab[i] = p[i];
-        i++;
-    }
-    Tab[i] = '\0';
-}
-
-void InverserTab(const char Tab[], char T[], int m) {
-    for (int i = 0; i < m; i++) {
-        T[i] = Tab[m - i - 1];
-    }
-    T[m] = '\0';
-}
-
-void AfficherTab(const char Tab[]) {
-    printf("%s\n", Tab);
-}
+char *LoadString(int N);
+int StringLength(char *str);
+void LoadArray(char *p, char arr[]);
+void DisplayArray(char arr[], int n);
+int SumStringASCII(char *p);
+void ReverseArray(char arr[], char rev[], int n);
+void ReverseString(char *start, char *end);
 
 int main() {
-    int N;
-    printf("Entrez la taille de la chaine: ");
-    scanf("%d", &N);
+    char *str;
+    int n;
+
+    printf("Please enter the maximum size of the string:\n");
+    scanf("%d", &n);
     getchar();
-    char *chaine = ChargerChaine(N);
-    int longueur = Longueur(chaine);
-    printf("La longueur de la chaine est: %d\n", longueur);
-    char Tab[longueur + 1];
-    ChargerTab(chaine, Tab);
-    char Inverse[longueur + 1];
-    InverserTab(Tab, Inverse, longueur);
-    printf("Chaine originale: ");
-    AfficherTab(Tab);
-    printf("Chaine inversee: ");
-    AfficherTab(Inverse);
-    free(chaine);
+
+    str = LoadString(n);
+    int len = StringLength(str);
+    char arr[len + 1], rev[len + 1];
+    LoadArray(str, arr);
+    printf("\nOriginal array: ");
+    DisplayArray(arr, len);
+    ReverseArray(arr, rev, len);
+    printf("\nReversed array: ");
+    DisplayArray(arr, len);
+    int sum = SumStringASCII(str);
+    printf("\nSum of ASCII values (recursive): %d\n", sum);
+    ReverseString(str, str + len - 1);
+    printf("String reversed recursively: %s\n", str);
+    free(str);
     return 0;
+}
+
+char *LoadString(int N) {
+    char *str = (char *)malloc((N + 1) * sizeof(char));
+    if (!str) {
+        printf("Memory allocation error.\n");
+        exit(1);
+    }
+    printf("Enter a string: ");
+    fgets(str, N + 1, stdin);
+    str[strcspn(str, "\n")] = '\0';
+    return str;
+}
+
+int StringLength(char *str) {
+    int length = 0;
+    while (str[length] != '\0') length++;
+    return length;
+}
+
+void LoadArray(char *p, char arr[]) {
+    int i = 0;
+    while (p[i] != '\0') {
+        arr[i] = p[i];
+        i++;
+    }
+    arr[i] = '\0';
+}
+
+void DisplayArray(char arr[], int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%c", arr[i]);
+    }
+    printf("\n");
+}
+
+void ReverseArray(char arr[], char rev[], int n) {
+    for (int i = 0; i < n; i++) {
+        rev[i] = arr[n - i - 1];
+    }
+    rev[n] = '\0';
+}
+
+int SumStringASCII(char *p) {
+    if (*p == '\0') return 0;
+    return (int)(*p) + SumStringASCII(p + 1);
+}
+
+void ReverseString(char *start, char *end) {
+    if (start >= end) return;
+    char temp = *start;
+    *start = *end;
+    *end = temp;
+    ReverseString(start + 1, end - 1);
 }
