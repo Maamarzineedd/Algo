@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Product {
+    int ID;
+    char Name[20];
+    int Price;
+} Product;
+
+typedef struct Node {
+    Product Prod;
+    struct Node *next;
+} Node;
+
+Node* create_empty_list() {
+    return NULL;
+}
+
+int is_empty(Node *head) {
+    return head == NULL;
+}
+
+Node* insert_begin(Node *head, Product prod) {
+    Node *newnode = (Node*)malloc(sizeof(Node));
+    if (!newnode) return head;
+    newnode->Prod = prod;
+    if (head == NULL) {
+        newnode->next = newnode;
+        return newnode;
+    }
+    Node *tail = head;
+    while (tail->next != head) tail = tail->next;
+    newnode->next = head;
+    tail->next = newnode;
+    return newnode;
+}
+
+Node* insert_end(Node *head, Product prod) {
+    Node *newnode = (Node*)malloc(sizeof(Node));
+    if (!newnode) return head;
+    newnode->Prod = prod;
+    if (head == NULL) {
+        newnode->next = newnode;
+        return newnode;
+    }
+    Node *tail = head;
+    while (tail->next != head) tail = tail->next;
+    tail->next = newnode;
+    newnode->next = head;
+    return head;
+}
+
+void display(Node *head) {
+    if (head == NULL) return;
+    Node *p = head;
+    do {
+        printf("ID: %d, Name: %s, Price: %d\n", p->Prod.ID, p->Prod.Name, p->Prod.Price);
+        p = p->next;
+    } while (p != head);
+}
+
+int main() {
+    Node *list = create_empty_list();
+
+    Product p1 = {1, "Apple", 50};
+    Product p2 = {2, "Banana", 30};
+    Product p3 = {3, "Cherry", 70};
+
+    list = insert_end(list, p1);
+    list = insert_begin(list, p2);
+    list = insert_end(list, p3);
+
+    display(list);
+
+    return 0;
+}
