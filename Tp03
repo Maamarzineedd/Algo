@@ -66,10 +66,12 @@ int main() {
     Product p1 = {1, "Apple", 50};
     Product p2 = {2, "Banana", 30};
     Product p3 = {3, "Cherry", 70};
+    Product p4 = {1, "tomato", 90};
 
     list = insert_end(list, p1);
     list = insert_begin(list, p2);
     list = insert_end(list, p3);
+    list=insert_begin(list, p4);
 
     display(list);
 
